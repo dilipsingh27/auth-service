@@ -5,18 +5,18 @@ const { insertInRedis,getFromRedis } = require('../utils/redis');
 const dotenv = require('dotenv').config();
 
 const createUser = async (userDetails) => {
-    const {username,email,password} = userDetails;
-    const userExists = await db.Users.findOne({where:{email}});
+    // const {email,password} = userDetails;
+    const userExists = await db.Users.findOne({where:{email:userDetails.email}});
     if (userExists) {
         return res.status(400).json({errors:[{ msg: 'User already exists' }] });
     }
 
     // const salt = await bcrypt.genSalt(10);
     // console.log(password);
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(userDetails.password, 10);
     console.log(hashedPassword);
 
-    const user = await db.Users.create({username,email,password:hashedPassword,isAdmin:false});
+    const user = await db.Users.create({email:userDetails.email,password:hashedPassword});
     return user;
     
 }

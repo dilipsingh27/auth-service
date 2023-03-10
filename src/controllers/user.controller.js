@@ -13,9 +13,9 @@ const createUser = async (req,res) => {
 
         const userDetails = req.body;
         const user = await userServices.createUser(userDetails);
-        res.status(201).send(user);
+        res.status(201).json(user);
     } catch (error) {
-        res.status(500).send({message:error.message});
+        res.status(500).json({message:error.message});
     }
 };
 
@@ -28,9 +28,9 @@ const loginUser = async (req,res) => {
         }
         const userDetails = req.body;
         const token = await userServices.loginUser(userDetails);
-        res.status(200).send(token);
+        res.status(200).json(token);
     } catch (error) {
-        res.status(500).send({message:error.message});
+        res.status(500).json({message:error.message});
     }
 }
 
@@ -39,9 +39,9 @@ const validateToken = async (req,res) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
         const user = await userServices.validateToken(token);
-        res.status(200).send(user);
+        res.status(200).json(user);
     } catch (error) {
-        res.status(500).send({message:error.message});
+        res.status(500).json({message:error.message});
     }
 }
 
