@@ -1,4 +1,4 @@
-const userServices = require('../src/services/user.service');
+const userServices = require("../src/services/user.service");
 const { Users } = require("../src/models");
 
 describe("User Services", () => {
@@ -12,7 +12,6 @@ describe("User Services", () => {
       const result = await userServices.createUser(mockResult);
       expect(result).toEqual(mockResult);
     });
-
   });
 
   describe("POST /login", () => {
@@ -33,7 +32,6 @@ describe("User Services", () => {
     });
 
     it("should not login a user when password is null", async () => {
-
       // jest.spyOn(Users, "findOne").mockImplementation(() => {
       //   throw new Error("User not found");
       // });
@@ -43,30 +41,31 @@ describe("User Services", () => {
       // expect(result).toEqual("User not found");
 
       jest.spyOn(Users, "findOne").mockResolvedValue(null);
-      await expect(userServices.loginUser("dilip")).rejects.toThrow(Error("res is not defined"));
-
+      await expect(userServices.loginUser("dilip")).rejects.toThrow(
+        Error("res is not defined")
+      );
     });
 
     it("should not login a user when password is invalid", async () => {
+      jest.spyOn(Users, "findOne").mockResolvedValue({
+        dataValues: {
+          id: "1",
+        },
+        name: "test",
+        password: "123456",
+      });
 
-          jest.spyOn(Users, "findOne").mockResolvedValue({
-            dataValues: {
-              id: "1",
-            },
-            name: "test",
-            password: "123456",
-          });
+      const mockResult = {
+        dataValues: {
+          id: "1",
+        },
+        name: "test",
+        password: "890876",
+      };
 
-          const mockResult = {
-            dataValues: {
-              id: "1",
-            },
-            name: "test",
-            password: "890876",
-          }
-
-          await expect(userServices.loginUser(mockResult)).rejects.toThrow(Error("res is not defined"));
-
+      await expect(userServices.loginUser(mockResult)).rejects.toThrow(
+        Error("res is not defined")
+      );
     });
   });
 });
